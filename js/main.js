@@ -23,7 +23,7 @@ $(document).ready(function()
     camera.fov = ( 360 / Math.PI ) * Math.atan( tanFOV * ( $(window).height() / windowHeight ) );
     camera.updateProjectionMatrix();
 	camera.position.z = 150;
-	camera.position.y = 500;
+	camera.position.y = 150;
 	camera.position.x = 0;
 
 	scene = new THREE.Scene();
@@ -47,7 +47,6 @@ $(document).ready(function()
 	$(window).resize(function() {
 		renderer.setSize( $(window).width(), $(window).height());
 		$(container).height( Math.floor($(window).height()) );
-		//$(container).width( Math.floor($(window).width()));
 		camera.aspect = $(window).width() / Math.floor($(window).height());
 		// adjust the FOV
 		camera.fov = ( 360 / Math.PI ) * Math.atan( tanFOV * ( $(window).height() / windowHeight ) );
@@ -61,11 +60,15 @@ $(document).ready(function()
 
 var plateforms = [];
 function init(){
-	plateform = new Plateform(scene);
-	plateform.update();
+	var plateform = new Plateform(scene);
+	plateforms.push( plateform );
 }
 
 function animate() {
+	for(var i = 0; i < plateforms.length; i++){
+		if( plateforms[i].life >= 0)
+			plateforms[i].update();
+	}
 	camera.lookAt(scene.position);
 	requestAnimationFrame( animate );
 	stats.update();

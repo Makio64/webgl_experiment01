@@ -29,7 +29,7 @@ var Cube = function (width, height, depth) {
 	
 	function v(x, y, z) {
 	
-		scope.vertices.push( new THREE.Vertex( new THREE.Vector3( x, y, z ) ) );
+		scope.vertices.push( new THREE.Vector3( x, y, z ) );
 	}
 
 	function f4(a, b, c, d) {
