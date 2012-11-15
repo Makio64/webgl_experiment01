@@ -11,4 +11,4 @@ var Direction = {
 	bottom:		0x000010,
 	forward:	0x000020,
 	backward:	0x000040
-}
+};
