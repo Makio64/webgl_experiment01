@@ -21,52 +21,56 @@ var Plateform = function (scene, direction, x, y)
 		if( scope.life == 0)
 			return;
 		
-		scope.life --;
 		
-		var speed = 5;
-		var geometry = scope.cube.geometry;
-		geometry.verticesNeedUpdate = true;
+		if( scope.life > 10)
+		{
+			var speed = 5;
+			var geometry = scope.cube.geometry;
+			geometry.verticesNeedUpdate = true;
+			
+			//Left
+			if( scope.direction & Direction.left ){
+				geometry.vertices[0].x += speed;
+				geometry.vertices[1].x += speed;
+				geometry.vertices[4].x += speed;
+				geometry.vertices[5].x += speed;
+			}
+			//Right
+			if( scope.direction & Direction.right ){
+				geometry.vertices[2].x -= speed;
+				geometry.vertices[3].x -= speed;
+				geometry.vertices[6].x -= speed;
+				geometry.vertices[7].x -= speed;
+			}
+			//Forward
+			if( scope.direction & Direction.forward ){
+				geometry.vertices[0].z -= speed;
+				geometry.vertices[1].z -= speed;
+				geometry.vertices[2].z -= speed;
+				geometry.vertices[3].z -= speed;
+			}
+			//Backward
+			if( scope.direction & Direction.backward ){
+				geometry.vertices[4].z += speed;
+				geometry.vertices[5].z += speed;
+				geometry.vertices[6].z += speed;
+				geometry.vertices[7].z += speed;
+			}
+		}
 		
-		//Left
-		if( scope.direction & Direction.left ){
-			geometry.vertices[0].x += speed;
-			geometry.vertices[1].x += speed;
-			geometry.vertices[4].x += speed;
-			geometry.vertices[5].x += speed;
-		}
-		//Right
-		if( scope.direction & Direction.right ){
-			geometry.vertices[2].x -= speed;
-			geometry.vertices[3].x -= speed;
-			geometry.vertices[6].x -= speed;
-			geometry.vertices[7].x -= speed;
-		}
-		//Forward
-		if( scope.direction & Direction.forward ){
-			geometry.vertices[0].z -= speed;
-			geometry.vertices[1].z -= speed;
-			geometry.vertices[2].z -= speed;
-			geometry.vertices[3].z -= speed;
-		}
-		//Backward
-		if( scope.direction & Direction.backward ){
-			geometry.vertices[4].z += speed;
-			geometry.vertices[5].z += speed;
-			geometry.vertices[6].z += speed;
-			geometry.vertices[7].z += speed;
-		}
-		
-		if(scope.life == 10){
+		else if(scope.life == 10){
 			activatePlatform--;
 			scope.expand();
 			scope.cube.matrixAutoUpdate = false;
 		} else if(scope.life<5){
 			scope.addTree();
 		}
+		
+		scope.life --;
 	}
 	
 	scope.addTree = function(){
-		var tree = new Tree( scope.x + Math.random()*100-50, 20, scope.y + Math.random()*100-50, scope.scene );
+		var tree = new Tree( scope.x + Math.random()*80-40, 20, scope.y + Math.random()*80-40, scope.scene );
 		scope.trees.push(tree);
 	}
 	
@@ -132,3 +136,19 @@ var Plateform = function (scene, direction, x, y)
 }
 
 Plateform.prototype.constructor = Plateform;
+
+//PARTICLE
+
+ 
+var pMaterial = new THREE.ParticleBasicMaterial({
+	color: 0xFFFFFF,
+	size: 1,
+	opacity: 1,
+	//map: THREE.ImageUtils.loadTexture(
+		//"img/particle.png"
+	//),
+	transparent: true
+});
+
+var plateformParticle = new THREE.ParticleSystem( this.particuleGeometry, pMaterial );
+scene.add( this.particles );
