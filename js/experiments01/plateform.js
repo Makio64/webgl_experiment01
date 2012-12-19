@@ -63,7 +63,11 @@ var Plateform = function (scene, direction, x, y)
 			scope.expand();
 			scope.cube.matrixAutoUpdate = false;
 		} else if(scope.life<5){
-			scope.addTree();
+			// if(Math.random()>.98){
+			// 	scope.addBuilding();
+			// } else {
+				scope.addTree();
+			// }
 		}
 		
 		scope.life --;
@@ -72,6 +76,11 @@ var Plateform = function (scene, direction, x, y)
 	scope.addTree = function(){
 		var tree = new Tree( scope.x + Math.random()*80-40, 20, scope.y + Math.random()*80-40, scope.scene );
 		scope.trees.push(tree);
+	}
+	
+	scope.addBuilding = function (){
+		var building = new Building( scope.x + Math.random()*80-40, 20, scope.y + Math.random()*80-40, scope.scene );
+		scope.trees.push(building);
 	}
 	
 	scope.expand = function(){
@@ -124,7 +133,8 @@ var Plateform = function (scene, direction, x, y)
 
 		var material = new THREE.MeshBasicMaterial( { vertexColors: THREE.FaceColors } );
 		//var colors = [0x777777*Math.random(),0x888888*Math.random(),0x666666*Math.random(),0x555555*Math.random(),0xAAAAAA*Math.random(),0xAAAAAA*Math.random()];
-		var colors = [0x777777,0x888888,0x666666,0x555555,0xAAAAAA,0xAAAAAA];
+		// var colors = [0x777777,0x888888,0x666666,0x555555,0xAAAAAA,0xAAAAAA];
+		var colors = [0x777777,0x888888,0x666666,0x555555,0xAAAAAA,baseColor+0x00000FF*Math.random()];
 		for ( var i = 0; i < geometry.faces.length; i ++ ) {
 			geometry.faces[ i ].color.setHex( colors[i] );
 		}
@@ -150,5 +160,5 @@ var pMaterial = new THREE.ParticleBasicMaterial({
 	transparent: true
 });
 
-var plateformParticle = new THREE.ParticleSystem( this.particuleGeometry, pMaterial );
-scene.add( this.particles );
+// var plateformParticle = new THREE.ParticleSystem( this.particuleGeometry, pMaterial );
+// scene.add( this.particles );

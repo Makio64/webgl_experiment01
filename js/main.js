@@ -6,8 +6,14 @@ windowHalfY = $(window).height()/2,
 isWebGL = Detector.webgl,
 tanFOV, windowHeight,
 stats, container, camera, scene, renderer, composer,
-activatePlatform = 0;
+activatePlatform = 0,
+ baseColor = Math.random()*0xFFFFFF,
+ //coolColor : 0, 9823620, 10885640, 6094110
+ negativeColor = getNegative(baseColor);
+ console.log("color:"+baseColor);
+ MAX_PLATFORM = 100;
 
+console.log(baseColor);
 
 $(document).ready(function() 
 {
@@ -56,6 +62,26 @@ $(document).ready(function()
 });
 
 
+function getNegative(color){
+	var red = color >> 16;
+	var green = color >> 8 & 0xFF;
+	var blue = color & 0xFF;
+	
+	return (0xFF-red) << 16 |
+           (0xFF-green) << 8 |
+		   (0xFF-blue); 
+}
+
+function getShadow(color, percent){
+	var red = color >> 16;
+	var green = color >> 8 & 0xFF;
+	var blue = color & 0xFF;
+	
+	return  (red*percent) << 16 |
+           (green*percent) << 8 |
+		   (blue*percent); 
+}
+
 var totalX = 0, totalY = 0, averageX = 0, averageY = 0, cameraLookAtPosition, plateforms = [];
 function init(){
 	addPlatformTo(0,0,0,0);
@@ -65,7 +91,7 @@ function init(){
 }
 
 function addPlatformTo(x,y,fromX,fromY){
-	if( plateforms.length >= 60 || !isFree(x,y) ){
+	if( plateforms.length >= MAX_PLATFORM || !isFree(x,y) ){
 		return false;
 	} 
 	totalX+=x;
@@ -101,7 +127,7 @@ function animate()
 		plateforms[i].update();
 	}
 	
-	if(activatePlatform==0 && plateforms.length < 60){
+	if(activatePlatform==0 && plateforms.length < MAX_PLATFORM){
 		while(true){
 			var idx = Math.floor((plateforms.length*Math.random())%plateforms.length);
 			if(plateforms[idx].expand())
@@ -109,17 +135,17 @@ function animate()
 		}
 	}
 	
-	camera.position.x += (Math.cos((mouseX/screenWidth)*Math.PI*.7) * 900-camera.position.x)*.05;
-	camera.position.z += (Math.sin((mouseX/screenWidth)*Math.PI*.7) * 900-camera.position.z)*.05;
-	camera.position.y += ((mouseY/screenHeight) *1300 +500-camera.position.y)*0.05;
-	console.log( averageX );
+
+	camera.position.x += ( averageX + Math.cos((mouseX/screenWidth)*Math.PI*1.9) * 900-camera.position.x)*.02;
+	camera.position.z += ( averageY + Math.sin((mouseX/screenWidth)*Math.PI*1.9) * 900-camera.position.z)*.02;
+	camera.position.y += ((mouseY/screenHeight) *2000 +700-camera.position.y)*0.05;
 	cameraLookAtPosition.x += (averageX-cameraLookAtPosition.x)*0.05;
 	cameraLookAtPosition.y += (averageY-cameraLookAtPosition.y)*0.05;
-	//cameraLookAtPosition.z += (averageX-cameraLookAtPosition.z)*0.05;
+	cameraLookAtPosition.z = 20;
 	camera.lookAt(cameraLookAtPosition);
 	requestAnimationFrame( animate );
 	stats.update();
-	TWEEN.update();
+	// TWEEN.update();
 	renderer.render(scene, camera);
 }
 

@@ -45,7 +45,11 @@ var Tree = function(x, y, z, scene)
 		
 		var material = new THREE.MeshBasicMaterial( { vertexColors: THREE.FaceColors } );
 		//var colors = [0x777777*Math.random(),0x888888*Math.random(),0x666666*Math.random(),0x555555*Math.random(),0xAAAAAA*Math.random(),0xAAAAAA*Math.random()];
-		var colors = [0x000000,0x333333,0x222222,0x111111,0x131313,0x000000];
+		var color = negativeColor+0x0000FF*Math.random();
+		var colors = [color,getShadow(color,.85),getShadow(color,.75),getShadow(color,.65),getShadow(color,.55),getShadow(color,.45),getShadow(color,.35)];
+
+		//Last color is useless
+		//var colors = [negativeColor,baseColor>>1,baseColor>>2,baseColor>>3,baseColor>>4,baseColor>>5];
 		for ( var i = 0; i < geometry.faces.length; i ++ ) {
 			geometry.faces[ i ].color.setHex( colors[i] );
 		}
